@@ -76,10 +76,10 @@ def generate_segments(snapshot: Snapshot, state, news: Dict[str, List]) -> List[
             segments.append(Segment(role="analyst", text=text, minute=minute_now))
 
     # 3) Bets & promos (personalized)
-    # Bets
+
+    # BET
     bet_line: Optional[str] = None
     for b in news.get("bets", []):
-        # build minimal change line
         sel_bits = []
         for sel in b.selections:
             bit = f"{sel.market}:{sel.state}"
@@ -89,18 +89,24 @@ def generate_segments(snapshot: Snapshot, state, news: Dict[str, List]) -> List[
         bet_line = f"{snapshot.customer.name}, " + "; ".join(sel_bits)
         break
 
-    # Promo (take first)
+    if bet_line:
+        bet_text = _ask_openai(f"Context personalizat: {bet_line}. Scrie 1 frază, neutră.", PERSONAL_STYLE)
+        if bet_text and not is_repetitive(state, bet_text):
+            segments.append(Segment(role="personalized", text=bet_text, minute=minute_now))
+
+    # PROMO
     promo_line: Optional[str] = None
     promos = news.get("promos", [])
     if promos:
         pr = promos[0]
         trig = pr.trigger.type.replace("_", " ")
-        promo_line = f"Notă: {pr.source} — {trig} — {pr.reward}."
+        win_s = getattr(pr.trigger, "window_seconds", None)
+        win_txt = f" în următoarele {max(1, round(win_s/60))} minute" if isinstance(win_s, (int, float)) else ""
+        promo_line = f"Notă: {pr.source} — {trig}{win_txt} — {pr.reward}."
 
-    if bet_line or promo_line:
-        txt = " ".join([x for x in [bet_line, promo_line] if x])
-        text = _ask_openai(f"Context personalizat: {txt}. Scrie 1 frază, neutră.", PERSONAL_STYLE)
-        if text and not is_repetitive(state, text):
-            segments.append(Segment(role="personalized", text=text, minute=minute_now))
+    if promo_line:
+        promo_text = _ask_openai(f"Context personalizat: {promo_line}. Scrie 1 frază, neutră.", PERSONAL_STYLE)
+        if promo_text and not is_repetitive(state, promo_text):
+            segments.append(Segment(role="analyst", text=promo_text, minute=minute_now))
 
     return segments
