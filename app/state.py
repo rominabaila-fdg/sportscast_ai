@@ -9,7 +9,7 @@ from .models import Score
 
 @dataclass
 class MatchState:
-    last_score: Score = Score(home=0, away=0)
+    last_score: Score = field(default_factory=lambda: Score(home=0, away=0))
     last_period: str = "1H"
     last_minute: int = 0
     processed_event_ids: Set[str] = field(default_factory=set)

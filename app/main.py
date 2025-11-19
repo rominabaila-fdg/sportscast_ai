@@ -1,8 +1,9 @@
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi.responses import StreamingResponse, JSONResponse, FileResponse
 from typing import Dict, Any, List
 import io
+import os
 
 from .config import settings
 from .models import Snapshot, CommentaryResponse, Segment
@@ -76,3 +77,17 @@ async def commentary(snapshot: Snapshot):
     # Stream WAV
     return StreamingResponse(io.BytesIO(wav_bytes), media_type="audio/wav",
                              headers={"X-Commentary": "ok", "X-Segments": str(len(segments))})
+
+@app.get("/download_commentary")
+async def download_commentary():
+    """Download the output_commentary_3.wav file"""
+    file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "output_commentary_3.wav")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Audio file not found")
+    
+    return FileResponse(
+        path=file_path,
+        media_type="audio/wav",
+        filename="output_commentary_3.wav"
+    )
