@@ -38,6 +38,11 @@ def generate_segments(snapshot: Snapshot, state, news: Dict[str, List]) -> List[
     # Pron dict (optional fallback)
     pron = {p.grapheme: p.alias for p in snapshot.pronunciation_dictionary}
 
+    # 0) Welcome message on first entry
+    if not state.welcomed:
+        welcome_text = f"Salut {snapshot.customer.name}, bine ai venit! Acestea sunt evenimentele momentului."
+        segments.append(Segment(role="personalized", text=welcome_text, minute=minute_now))
+
     # 1) Goals (coalesced groups)
     goal_groups = coalesce_goals(news.get("goals", []))
     for group in goal_groups:
@@ -91,7 +96,7 @@ def generate_segments(snapshot: Snapshot, state, news: Dict[str, List]) -> List[
 
     bet_was_added = False
     if bet_line:
-        bet_text = _ask_openai(f"Context personalizat: {bet_line}. Scrie 1 frază, neutră.", PERSONAL_STYLE)
+        bet_text = _ask_openai(f"Context personalizat: {bet_line}. Scrie 1 frază, neutră in care sa descrii starea biletelor in raport cu meciul.", PERSONAL_STYLE)
         if bet_text and not is_repetitive(state, bet_text):
             segments.append(Segment(role="personalized", text=bet_text, minute=minute_now))
             bet_was_added = True

@@ -18,6 +18,7 @@ class MatchState:
     recent_phrases: Deque[str] = field(default_factory=lambda: deque(maxlen=20))
     last_event_time_by_type: Dict[str, float] = field(default_factory=dict)  # epoch seconds
     updated_at: float = field(default_factory=time)
+    welcomed: bool = False
 
 class InMemoryStore:
     def __init__(self):

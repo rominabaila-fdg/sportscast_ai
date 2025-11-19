@@ -73,6 +73,10 @@ async def commentary(snapshot: Snapshot):
         state.processed_event_ids.add(ev.event_id)
     state.last_score = snapshot.match_info.score
     register_phrases(state, [s.text for s in segments])
+    
+    # Mark as welcomed after successful audio generation
+    if not state.welcomed:
+        state.welcomed = True
 
     # Stream WAV
     return StreamingResponse(io.BytesIO(wav_bytes), media_type="audio/wav",

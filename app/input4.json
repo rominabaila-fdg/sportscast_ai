@@ -1,0 +1,178 @@
+{
+  "snapshot_meta": {
+    "snapshot_id": "snap_00001",
+    "sequence_no": 1,
+    "generated_at": "2024-11-18T15:05:00Z",
+    "match_id": "MATCH_123456"
+  },
+  "match_info": {
+    "period": "1H",
+    "clock": { "elapsed_seconds": 780, "minute": 13, "seconds_in_period": 780, "stoppage_seconds": 0 },
+    "score": { "home": 1, "away": 0 },
+    "arena": "Camp Nou",
+    "city": "Barcelona",
+    "rivalry": "El Clásico",
+    "teams": [
+      {
+        "team_id": "BAR",
+        "name": "Barcelona",
+        "is_home_team": true,
+        "players_roster": [
+          { "id": 109, "player_name": "Robert Lewandowski", "tshirt_number": 9, "position": "ST", "pron_alias": "Leh-van-DOHV-skee" },
+          { "id": 101, "player_name": "Sergio Busquets", "tshirt_number": 5, "position": "DM", "pron_alias": "Bur-sketts" }
+        ]
+      },
+      {
+        "team_id": "RMA",
+        "name": "Real Madrid",
+        "is_home_team": false,
+        "players_roster": [
+          { "id": 208, "player_name": "Toni Kroos", "tshirt_number": 8, "position": "CM" }
+        ]
+      }
+    ]
+  },
+  "match_statistics": {
+    "goals": [
+      {
+        "event_id": "ev_goal_0750_bar_lewa",
+        "period": "1H",
+        "clock": { "elapsed_seconds": 750, "minute": 12, "seconds_in_period": 750, "stoppage_seconds": 0 },
+        "team_id": "BAR",
+        "scorer_id": 109,
+        "assist_id": null,
+        "body_part": "right_foot",
+        "situation": "open_play",
+        "description_short": "finalizează din 10 metri, jos la colț",
+        "score_after": { "home": 1, "away": 0 }
+      }
+    ]
+  },
+  "events": [
+    {
+      "event_id": "ev_card_0720_rma",
+      "type": "Card",
+      "period": "1H",
+      "clock": { "elapsed_seconds": 720, "minute": 12, "seconds_in_period": 720, "stoppage_seconds": 0 },
+      "team_id": "RMA",
+      "player_ids": [208],
+      "detail_short": "Yellow card for Kroos (tackle întârziat)",
+      "tags": ["yellow"],
+      "source": "official",
+      "confidence": 0.99,
+      "score_after": { "home": 0, "away": 0 }
+    },
+    {
+      "event_id": "ev_var_0770_bar",
+      "type": "VAR",
+      "period": "1H",
+      "clock": { "elapsed_seconds": 770, "minute": 13, "seconds_in_period": 770, "stoppage_seconds": 0 },
+      "team_id": "BAR",
+      "player_ids": [],
+      "detail_short": "VAR check offside — NO GOAL",
+      "tags": ["var_check", "offside"],
+      "source": "official",
+      "confidence": 0.95,
+      "score_after": { "home": 1, "away": 0 }
+    }
+  ],
+  "customer": {
+    "id": "user_dan_01",
+    "name": "Dan",
+    "locale": "ro-RO",
+    "tts_prefs": {
+      "voice_id_main": "gnPxliFHTp6OK6tcoA6i",
+      "voice_id_analyst": "gnPxliFHTp6OK6tcoA6i",
+      "energy_bias": "medium_high",
+      "profanity_filter": true
+    }
+  },
+  "betslips": [
+    {
+      "betslip_id": "BET_001_MAIN",
+      "belongs_to_customer_id": "user_dan_01",
+      "event_id": "MATCH_123456",
+      "selections": [
+        { "selection_id": "sel_btts", "market": "BTTS", "description": "Both Teams To Score", "state": "live", "result": "", "is_active": true, "settled": false , "current_match": true},
+        { "selection_id": "sel_over25", "market": "Over 2.5", "description": "Over 2.5 Total Goals", "state": "live", "result": "", "is_active": true, "settled": false , "current_match": false}
+      ],
+      "payout_info": {
+        "stake": 10.00,
+        "potential_payout": 45.00,
+        "current_partial_payout": 0.00,
+        "currency": "USD",
+        "odds": { "original_decimal": 4.50, "live_decimal": 2.40 },
+        "cashout_available": false,
+        "cashout_value": 0.00
+      },
+      "timestamps": {
+        "bet_placed": "2024-11-18T14:30:00Z",
+        "match_start": "2024-11-18T15:00:00Z",
+        "last_state_change_ts": "2024-11-18T15:04:50Z"
+      }
+    }
+  ],
+  "promotions": [
+    {
+      "promotion_id": "promo_fd_001",
+      "source": "FanDuel",
+      "trigger": { "type": "goal_within", "window_seconds": 300 },
+      "reward": "Free bet boost for tomorrow",
+      "expires_at": "2024-11-18T16:00:00Z"
+    }
+  ],
+  "other_betslips": [
+    {
+      "betslip_id": "BET_002_PSG_MIL",
+      "belongs_to_customer_id": "user_dan_01",
+      "event_id": "MATCH_PSG_MILAN_20241118",
+      "match_label": "PSG – Milan",
+      "selections": [
+        { "selection_id": "sel_over25_psg", "market": "Over 2.5", "description": "Over 2.5 Total Goals", "state": "live", "result": "", "is_active": true, "settled": false }
+      ],
+      "payout_info": {
+        "stake": 5.00,
+        "potential_payout": 12.00,
+        "current_partial_payout": 0.00,
+        "currency": "USD",
+        "odds": { "original_decimal": 2.40, "live_decimal": 1.70 },
+        "cashout_available": true,
+        "cashout_value": 6.50
+      },
+      "timestamps": {
+        "bet_placed": "2024-11-18T14:00:00Z",
+        "match_start": "2024-11-18T15:00:00Z",
+        "last_state_change_ts": "2024-11-18T15:03:30Z"
+      },
+      "status_summary": "PSG conduce 2–0 (min. 35)"
+    },
+    {
+      "betslip_id": "BET_003_LAL_BOS",
+      "belongs_to_customer_id": "user_dan_01",
+      "event_id": "MATCH_NBA_LAL_BOS_20241118",
+      "match_label": "Lakers – Celtics",
+      "selections": [
+        { "selection_id": "sel_lakers_ml", "market": "Moneyline", "description": "Lakers to Win", "state": "pre", "result": "", "is_active": true, "settled": false }
+      ],
+      "payout_info": {
+        "stake": 10.00,
+        "potential_payout": 18.00,
+        "current_partial_payout": 0.00,
+        "currency": "USD",
+        "odds": { "original_decimal": 1.80, "live_decimal": 1.80 },
+        "cashout_available": false,
+        "cashout_value": 0.00
+      },
+      "timestamps": {
+        "bet_placed": "2024-11-18T13:00:00Z",
+        "match_start": "2024-11-18T22:00:00Z",
+        "last_state_change_ts": "2024-11-18T13:00:00Z"
+      },
+      "status_summary": "Începe la 22:00"
+    }
+  ],
+  "pronunciation_dictionary": [
+    { "grapheme": "Robert Lewandowski", "alias": "Leh-van-DOHV-skee" },
+    { "grapheme": "Toni Kroos", "alias": "Toh-nee Krohs" }
+  ]
+}
