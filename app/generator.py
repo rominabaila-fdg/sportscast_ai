@@ -5,7 +5,7 @@ import os
 
 from openai import OpenAI
 from .models import Snapshot, Segment, Goal, GenericEvent
-from .prompts import build_messages, PBP_STYLE, ANALYST_STYLE, PERSONAL_STYLE
+from .prompts import build_messages, PBP_STYLE, ANALYST_STYLE, PERSONAL_STYLE, PERSONAL_STYLE_NO_NAME
 from .utils import map_player_name, team_name, score_str, coalesce_goals, is_repetitive
 from .config import settings
 
@@ -89,10 +89,12 @@ def generate_segments(snapshot: Snapshot, state, news: Dict[str, List]) -> List[
         bet_line = f"{snapshot.customer.name}, " + "; ".join(sel_bits)
         break
 
+    bet_was_added = False
     if bet_line:
         bet_text = _ask_openai(f"Context personalizat: {bet_line}. Scrie 1 frază, neutră.", PERSONAL_STYLE)
         if bet_text and not is_repetitive(state, bet_text):
             segments.append(Segment(role="personalized", text=bet_text, minute=minute_now))
+            bet_was_added = True
 
     # PROMO
     promo_line: Optional[str] = None
@@ -102,10 +104,12 @@ def generate_segments(snapshot: Snapshot, state, news: Dict[str, List]) -> List[
         trig = pr.trigger.type.replace("_", " ")
         win_s = getattr(pr.trigger, "window_seconds", None)
         win_txt = f" în următoarele {max(1, round(win_s/60))} minute" if isinstance(win_s, (int, float)) else ""
-        promo_line = f"Notă: {pr.source} — {trig}{win_txt} — {pr.reward}."
+        promo_line = f"{snapshot.customer.name}: {pr.source} — {trig}{win_txt} — {pr.reward}."
 
     if promo_line:
-        promo_text = _ask_openai(f"Context personalizat: {promo_line}. Scrie 1 frază, neutră.", PERSONAL_STYLE)
+        # Use PERSONAL_STYLE_NO_NAME if bet was already mentioned (which includes the name)
+        style = PERSONAL_STYLE_NO_NAME if bet_was_added else PERSONAL_STYLE
+        promo_text = _ask_openai(f"Context personalizat: {promo_line}. Scrie 1 frază, neutră sa explici cand si cum poate obtine userul oferta. ", style)
         if promo_text and not is_repetitive(state, promo_text):
             segments.append(Segment(role="analyst", text=promo_text, minute=minute_now))
 

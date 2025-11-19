@@ -19,8 +19,6 @@ def hash_betslip_state(betslip) -> str:
     parts = [betslip.betslip_id]
     for sel in betslip.selections:
         parts.append(f"{sel.selection_id}:{sel.state}:{sel.result}:{int(sel.is_active)}:{int(sel.settled)}")
-    pi = betslip.payout_info
-    parts.append(f"cashout_avail:{int(pi.cashout_available)}") 
     raw = "|".join(parts).encode("utf-8")
     return hashlib.sha1(raw).hexdigest()
 

@@ -24,6 +24,11 @@ PERSONAL_STYLE = (
     "Exemplu: 'Dan, BTTS e deja câștigat; Over 2.5 rămâne în joc.'"
 )
 
+PERSONAL_STYLE_NO_NAME = (
+    "Adresare personală scurtă fara prenumele utilizatorului, neutră și la obiect. "
+    "Exemplu: 'BTTS e deja câștigat; Over 2.5 rămâne în joc.'"
+)
+
 def build_messages(context: str, style_hint: str) -> list:
     return [
         {"role": "system", "content": BASE_SYSTEM},
