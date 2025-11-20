@@ -28,9 +28,10 @@ async def tts_segment(client: httpx.AsyncClient, text: str, voice_id: str,
         "text": text,
         "model_id": settings.ELEVEN_MODEL_ID,
         "voice_settings": {
-            "stability": 0.55,
-            "similarity_boost": 0.85,
-            "style": 0.25,
+            "speed":0.8,
+            "stability": 0.35,
+            "similarity_boost": 0.75,
+            "style": 0.9,
             "use_speaker_boost": True
         }
     }

@@ -4,8 +4,11 @@ from typing import List, Dict, Any, Optional
 import os
 
 from openai import OpenAI
+
+from app.prompts_en import build_messages_en
+from app.prompts_en import PBP_STYLE, ANALYST_STYLE, PERSONAL_STYLE
 from .models import Snapshot, Segment, Goal, GenericEvent
-from .prompts import build_messages, PBP_STYLE, ANALYST_STYLE, PERSONAL_STYLE, PERSONAL_STYLE_NO_NAME
+# from .prompts import build_messages, PBP_STYLE, ANALYST_STYLE, PERSONAL_STYLE
 from .utils import map_player_name, team_name, score_str, coalesce_goals, is_repetitive
 from .config import settings
 
@@ -22,7 +25,7 @@ def _ask_openai(context: str, style: str) -> str:
     try:
         resp = _client.chat.completions.create(
             model=settings.OPENAI_MODEL,
-            messages=build_messages(context, style),
+            messages=build_messages_en(context, style),
             temperature=0.75,
             max_tokens=140,
             n=1,
@@ -76,7 +79,8 @@ def generate_segments(snapshot: Snapshot, state, news: Dict[str, List]) -> List[
             bullets.append(b)
         context = " | ".join(bullets)
         prompt = f"Context: {snapshot.match_info.rivalry or ''}, {snapshot.match_info.arena or ''}. Noutăți: {context}. Scrie 1 frază informativă."
-        text = _ask_openai(prompt, ANALYST_STYLE)
+        # text = _ask_openai(prompt, ANALYST_STYLE)
+        text = _ask_openai(prompt, PBP_STYLE)
         if text and not is_repetitive(state, text):
             segments.append(Segment(role="analyst", text=text, minute=minute_now))
 
@@ -108,13 +112,14 @@ def generate_segments(snapshot: Snapshot, state, news: Dict[str, List]) -> List[
         pr = promos[0]
         trig = pr.trigger.type.replace("_", " ")
         win_s = getattr(pr.trigger, "window_seconds", None)
-        win_txt = f" în următoarele {max(1, round(win_s/60))} minute" if isinstance(win_s, (int, float)) else ""
-        promo_line = f"{snapshot.customer.name}: {pr.source} — {trig}{win_txt} — {pr.reward}."
+        # win_txt = f" în următoarele {max(1, round(win_s/60))} minute" if isinstance(win_s, (int, float)) else ""
+        # promo_line = f"Notă: {pr.source} — {trig}{win_txt} — {pr.reward}."
+        win_txt = f" in the next {max(1, round(win_s/60))} minutes" if isinstance(win_s, (int, float)) else ""
+        promo_line = f"Note: {pr.source} — {trig}{win_txt} — {pr.reward}."
 
     if promo_line:
-        # Use PERSONAL_STYLE_NO_NAME if bet was already mentioned (which includes the name)
-        style = PERSONAL_STYLE_NO_NAME if bet_was_added else PERSONAL_STYLE
-        promo_text = _ask_openai(f"Context personalizat: {promo_line}. Scrie 1 frază, neutră sa explici cand si cum poate obtine userul oferta. ", style)
+        # promo_text = _ask_openai(f"Context personalizat: {promo_line}. Scrie 1 frază, neutră.", PERSONAL_STYLE)
+        promo_text = _ask_openai(f"Personalized context: {promo_line}. Write 1 neutral sentence.", PERSONAL_STYLE)
         if promo_text and not is_repetitive(state, promo_text):
             segments.append(Segment(role="analyst", text=promo_text, minute=minute_now))
 
